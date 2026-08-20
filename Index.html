@@ -16,7 +16,7 @@ video{width:100%;height:100vh;object-fit:contain;background:#000}
 <p id="title"></p>
 
 <video id="player" controls playsinline controlsList="nodownload">
-  <source src="" type="video/mp4">
+<source src="" type="video/mp4">
 </video>
 
 <script>
@@ -26,46 +26,47 @@ const DIRECT_LINK = "https://www.effectivecpmnetwork.com/xt996fd7w?key=8ee2c6986
 const video = document.getElementById("player");
 const title = document.getElementById("title");
 
-let clicked = false;
 let redirected = false;
 
 fetch(JSON_URL)
 .then(res => res.json())
 .then(data => {
 
-  const vids = data.videos;
+    const vids = data.videos;
 
-  const name = decodeURIComponent(
-    location.hash.replace("#/", "")
-  );
+    const name = decodeURIComponent(
+        location.hash.replace("#/", "")
+    );
 
-  let selected = vids.find(v => v.id === name);
+    let selected = vids.find(v => v.id === name);
 
-  if (!selected) {
-    selected = vids[0];
-  }
+    if (!selected) {
+        selected = vids[0];
+    }
 
-  video.src = selected.cdn;
-  title.innerText = selected.id;
+    video.src = selected.cdn;
+    title.innerText = selected.id;
+    video.load();
 
-  video.load();
 })
 .catch(err => {
-  console.error("Gagal memuat videos.json:", err);
+    console.error(err);
 });
 
-video.addEventListener("click", () => {
-  if (!clicked) {
-    clicked = true;
-    window.location.href = DIRECT_LINK;
-  }
+/* TRACK KLIK VIDEO */
+video.addEventListener("click", function(){
+    if (!redirected) {
+        redirected = true;
+        window.location.href = DIRECT_LINK;
+    }
 });
 
-video.addEventListener("timeupdate", () => {
-  if (!redirected && video.currentTime >= 30) {
-    redirected = true;
-    window.location.href = DIRECT_LINK;
-  }
+/* TRACK SETELAH 30 DETIK */
+video.addEventListener("timeupdate", function(){
+    if (!redirected && video.currentTime >= 30) {
+        redirected = true;
+        window.location.href = DIRECT_LINK;
+    }
 });
 </script>
 
